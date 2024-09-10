@@ -216,7 +216,7 @@ contract EUROPToken is
     function payGaslessBasefee(address payer, address paymaster) external {
         require(isTrustedForwarder(msg.sender), 
                 "EUROP: only trustedForwarder can process gasless basefee payment");
-        require(balanceOf(_msgSender()) >= _gaslessBasefee, 
+        require(balanceOf(payer) >= _gaslessBasefee, 
                 "EUROP: balance too low, can't pay gasless basefee");
         uint256 feeRate = _txfeeRate;
         _txfeeRate = 0;
