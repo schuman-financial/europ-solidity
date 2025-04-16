@@ -42,6 +42,17 @@ module.exports = {
       url: "https://polygon-mainnet.infura.io/v3/" + process.env.INFURA_API_KEY,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
+    // Avalanche C-Chain configurations
+    avalanche: {
+      url: "https://api.avax.network/ext/bc/C/rpc",
+      chainId: 43114,
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+    },
+    fuji: {
+      url: "https://api.avax-test.network/ext/bc/C/rpc",
+      chainId: 43113,
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+    },
     // Other networks to be added here
   },
   etherscan: {
@@ -49,6 +60,8 @@ module.exports = {
       mainnet: process.env.ETHERSCAN_APIKEY,
       sepolia: process.env.ETHERSCAN_APIKEY,
       polygon: process.env.POLYGON_APIKEY,
+      avalanche: process.env.SNOWTRACE_APIKEY,
+      avalancheFuji: process.env.SNOWTRACE_APIKEY,
     },
   },
 };

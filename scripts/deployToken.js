@@ -16,6 +16,7 @@ async function main() {
   const deployment = await hre.upgrades.deployProxy(Token, [], {
     initializer: "initializeEUROP",
     kind: "uups",
+    redeployImplementation: "always",
   });
 
   const proxy = await deployment.waitForDeployment();
@@ -34,23 +35,23 @@ async function main() {
   await tx.wait();
   console.log("✅ Owner set to:", owner);
 
-  // Verify in scanner
-  try {
-    await hre.run("verify", {
-      address: currentImplAddress,
-    });
-  } catch (e) {
-    if (String(e).indexOf("already verified") == -1) {
-      // verified probably because it has the same bytecode as some other contract
-      throw e;
-    } else console.error(e);
-  }
+  // // Verify in scanner
+  // try {
+  //   await hre.run("verify", {
+  //     address: currentImplAddress,
+  //   });
+  // } catch (e) {
+  //   if (String(e).indexOf("already verified") == -1) {
+  //     // verified probably because it has the same bytecode as some other contract
+  //     throw e;
+  //   } else console.error(e);
+  // }
 
-  console.log(
-    "Contracts verified. You can now go to contract at " +
-      proxyAddr +
-      " and mark it as proxy"
-  );
+  // console.log(
+  //   "Contracts verified. You can now go to contract at " +
+  //     proxyAddr +
+  //     " and mark it as proxy"
+  // );
   console.log("--------------------------------------------------------");
 }
 
