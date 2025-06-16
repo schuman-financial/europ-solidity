@@ -1,4 +1,4 @@
-require("@nomiclabs/hardhat-etherscan");
+require("@nomicfoundation/hardhat-verify");
 require("@openzeppelin/hardhat-upgrades");
 require("dotenv").config();
 
@@ -26,6 +26,10 @@ module.exports = {
         },
       ],
     },
+    localnet: {
+      url: "http://127.0.0.1:8545",
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+    },
     sepolia: {
       url: "https://sepolia.infura.io/v3/" + process.env.INFURA_API_KEY,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
@@ -34,9 +38,13 @@ module.exports = {
       url: "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
-    amoy: {
+    polygonAmoy: {
       url: "https://polygon-amoy.infura.io/v3/" + process.env.INFURA_API_KEY,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
+      gasPrice: 30000000000, // 30 gwei - typical for Polygon Amoy
+      gas: 8000000, // Set a reasonable gas limit
+      timeout: 60000, // 60 seconds
+      confirmations: 2,
     },
     polygon: {
       url: "https://polygon-mainnet.infura.io/v3/" + process.env.INFURA_API_KEY,
@@ -60,8 +68,11 @@ module.exports = {
       mainnet: process.env.ETHERSCAN_APIKEY,
       sepolia: process.env.ETHERSCAN_APIKEY,
       polygon: process.env.POLYGON_APIKEY,
+      polygonAmoy: process.env.POLYGON_APIKEY,
       avalanche: process.env.SNOWTRACE_APIKEY,
-      avalancheFuji: process.env.SNOWTRACE_APIKEY,
     },
+  },
+  sourcify: {
+    enabled: false
   },
 };
