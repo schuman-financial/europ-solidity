@@ -13,21 +13,6 @@ async function main() {
   const network = hre.network.name;
   console.log(`📡 Deploying to network: ${network}`);
 
-  // Gas price settings for different networks
-  const gasPrice = ["33", "gwei"];
-  const gasLimit = 6_000_000;
-  let gasSettings = {};
-  if (network === "amoy") {
-    // Optimized settings for Polygon Amoy
-    gasSettings = {
-      gasPrice: hre.ethers.parseUnits(...gasPrice), // Lower than default 30 gwei
-      gasLimit, // Reasonable limit for complex deployment
-    };
-    console.log(`⛽ Using optimized gas settings for Amoy:`);
-    console.log(`   Gas Price: ${gasPrice.join(" ")} in wei: ${hre.ethers.parseUnits(...gasPrice)}`);
-    console.log(`   Gas Limit: ${gasLimit}`);
-  }
-
   // Get the contract factory
   const Token = await hre.ethers.getContractFactory("EUROPToken");
 
@@ -37,10 +22,6 @@ async function main() {
     initializer: "initializeEUROP",
     kind: "uups",
     redeployImplementation: "always",
-    // Apply gas settings if we have them
-    ...(Object.keys(gasSettings).length > 0 && { 
-      txOverrides: gasSettings 
-    }),
   });
 
   const proxy = await deployment.waitForDeployment();
@@ -58,7 +39,7 @@ async function main() {
   console.log("✅ Owner set to:", owner);
   
   // Apply gas settings to the setOwner transaction if available
-  const setOwnerTx = await proxy.setOwner(owner, gasSettings);
+  const setOwnerTx = await proxy.setOwner(owner);
   await setOwnerTx.wait();
   console.log("✅ Owner set successfully");
 

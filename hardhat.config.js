@@ -41,9 +41,9 @@ module.exports = {
     polygonAmoy: {
       url: "https://polygon-amoy.infura.io/v3/" + process.env.INFURA_API_KEY,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
-      gasPrice: 30000000000, // 30 gwei - typical for Polygon Amoy
-      gas: 8000000, // Set a reasonable gas limit
-      timeout: 60000, // 60 seconds
+      gasPrice: 31_000_000_000, // 31 gwei - typical for Polygon Amoy
+      gas: 6_000_000, // Set a reasonable gas limit
+      timeout: 60_000, // 60 seconds
       confirmations: 2,
     },
     polygon: {
