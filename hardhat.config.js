@@ -61,6 +61,18 @@ module.exports = {
       chainId: 43113,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
+    // Plasma Testnet configuration
+    plasmaTestnet: {
+      url: "https://testnet-rpc.plasma.to",
+      chainId: 9746,
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+    },
+    // Plasma Mainnet configuration
+    plasmaMainnet: {
+      url: "https://rpc.plasma.to",
+      chainId: 9745,
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
+    },
     // Other networks to be added here
   },
   etherscan: {
