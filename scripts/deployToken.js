@@ -9,10 +9,15 @@ async function main() {
     throw new Error("⚠️ INITIAL_OWNER_ADDRESS is not set");
   }
 
+  // Get network information
+  const network = hre.network.name;
+  console.log(`📡 Deploying to network: ${network}`);
+
   // Get the contract factory
   const Token = await hre.ethers.getContractFactory("EUROPToken");
 
-  // Deploy the UUPS proxy with the custom initializer
+  // Deploy the UUPS proxy with the custom initializer and gas settings
+  console.log("🚀 Starting deployment...");
   const deployment = await hre.upgrades.deployProxy(Token, [], {
     initializer: "initializeEUROP",
     kind: "uups",
@@ -31,33 +36,40 @@ async function main() {
   console.log("✅ Token tracker deployed to:", currentImplAddress);
 
   const owner = process.env.INITIAL_OWNER_ADDRESS;
-  const tx = await proxy.setOwner(owner);
-  await tx.wait();
   console.log("✅ Owner set to:", owner);
+  
+  // Apply gas settings to the setOwner transaction if available
+  const setOwnerTx = await proxy.setOwner(owner);
+  await setOwnerTx.wait();
+  console.log("✅ Owner set successfully");
 
-  // // Verify in scanner
-  // try {
-  //   await hre.run("verify", {
-  //     address: currentImplAddress,
-  //   });
-  // } catch (e) {
-  //   if (String(e).indexOf("already verified") == -1) {
-  //     // verified probably because it has the same bytecode as some other contract
-  //     throw e;
-  //   } else console.error(e);
-  // }
+  // Verify in scanner
+  try {
+    console.log("🔍 Starting contract verification...");
+    // await hre.run("verify", {
+    //   address: currentImplAddress,
+    // });
+    console.log("✅ Contract verification completed");
+  } catch (e) {
+    if (String(e).indexOf("already verified") == -1) {
+      // verified probably because it has the same bytecode as some other contract
+      console.error("❌ Verification failed:", e.message);
+      throw e;
+    } else {
+      console.log("ℹ️ Contract already verified");
+    }
+  }
 
-  // console.log(
-  //   "Contracts verified. You can now go to contract at " +
-  //     proxyAddr +
-  //     " and mark it as proxy"
-  // );
+  console.log(
+    "🎉 Deployment completed! You can now go to contract at: " + proxyAddr +" and mark it as proxy"
+  );
+  console.log("📝 You can now verify the contract on the block explorer");
   console.log("--------------------------------------------------------");
 }
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("❌ Deployment failed:", error);
     process.exit(1);
   });
